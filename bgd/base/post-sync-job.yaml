@@ -1,19 +1,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: bgd-post-sync-hook
-  namespace: bgd
+  name: block-second-app-if-failed
+  namespace: second-bgd
   annotations:
-    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   template:
     spec:
       containers:
-      - name: post-sync-task
+      - name: gatekeeper-task
         image: alpine:latest
         command: ["/bin/sh", "-c"]
-        args: ["exit 1"]
-        #args: ["echo 'The app has successfully synced! Running post-sync tasks...'; sleep 5;"]
+        args: ["exit 1"] 
       restartPolicy: Never
-  backoffLimit: 2
+  backoffLimit: 0
