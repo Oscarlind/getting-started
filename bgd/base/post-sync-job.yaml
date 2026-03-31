@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bgd-post-sync-hook
+  namespace: bgd
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: post-sync-task
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args: ["exit 1"]
+        #args: ["echo 'The app has successfully synced! Running post-sync tasks...'; sleep 5;"]
+      restartPolicy: Never
+  backoffLimit: 2
